@@ -1,0 +1,21 @@
+%% Parameter Setting:
+m1 = 2500;
+m2 = 320;
+k1 = 80000;
+k2 = 500000;
+b1 = 350;
+b2 = 15020;
+A = [0 1 0 0;-k1/m1 -b1/m1 k1/m1 b1/m1;0 0 0 1;k1/m2 b1/m2 (k2-k1)/m2 -b1/m2];
+B1 = [0; 1/m1; 0; -1/m2];
+B2 = [0; 0; 0; k2/m2];
+C = [0 1 0 0];
+sysu2y = ss(A,B1,C,0);
+sysd2y = ss(A,B2,C,0);
+Gd1 = c2d(sysu2y,0.01);
+Gd2 = c2d(sysd2y,0.01);
+[num1,den1] = ss2tf(A,B1,C,0);
+[num2,den2] = ss2tf(A,B2,C,0);
+GD1 = tf(num1,den1);
+GD2 = tf(num2,den2);
+Q = tf([0 1],[1 0]);
+Q2 = c2d(Q,0.01);
